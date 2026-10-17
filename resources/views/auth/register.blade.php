@@ -91,6 +91,10 @@
 
                 <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username">
 
+                <div class="form-text">
+                    {{ __('Letters only. Your country code is added to it, so "john" from the United States is saved as "johnus".') }}
+                </div>
+
                 @error('username')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

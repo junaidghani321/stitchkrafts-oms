@@ -6,6 +6,8 @@ use App\Enums\Country;
 use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserDetail;
+use Closure;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -47,12 +49,24 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
+     * The username is letters only — the country code appended on the way to
+     * the column is what carries the digits-free handle into storage, and
+     * `bail` keeps the closure below from seeing anything but a string.
+     *
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => ['required', 'string', 'min:3', 'max:50', 'alpha_dash', 'unique:user_details,username'],
+            'username' => [
+                'bail',
+                'required',
+                'string',
+                'min:3',
+                'max:'.UserDetail::USERNAME_MAX,
+                'alpha:ascii',
+                $this->usernameIsFreeInCountry($data['country'] ?? null),
+            ],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'name' => ['required', 'string', 'max:255'],
             'company_name' => ['nullable', 'string', 'max:150'],
@@ -60,6 +74,34 @@ class RegisterController extends Controller
             'country' => ['required', Rule::enum(Country::class)],
             'contact_number' => ['nullable', 'string', 'max:30'],
         ]);
+    }
+
+    /**
+     * Uniqueness has to be judged on the stored form rather than the typed
+     * one: `john` from the UK and `john` from the US are two accounts,
+     * `johnuk` and `johnus`, while a second UK `john` is a collision. A plain
+     * `unique:user_details,username` on the field would compare the wrong
+     * string and turn the first registration of a handle into a global claim.
+     *
+     * An invalid or missing country leaves nothing to qualify the username
+     * with, so the check stands down and the country's own error speaks for
+     * the request.
+     */
+    protected function usernameIsFreeInCountry(?string $country): Closure
+    {
+        return function (string $attribute, string $value, Closure $fail) use ($country): void {
+            $case = Country::tryFrom((string) $country);
+
+            if ($case === null) {
+                return;
+            }
+
+            $taken = UserDetail::where('username', UserDetail::qualifyUsername($value, $case))->exists();
+
+            if ($taken) {
+                $fail('The username has already been taken.');
+            }
+        };
     }
 
     /**
@@ -90,7 +132,7 @@ class RegisterController extends Controller
             ]);
 
             $user->detail()->create([
-                'username' => $data['username'],
+                'username' => UserDetail::qualifyUsername($data['username'], $data['country']),
                 'country' => $data['country'],
                 'company_name' => $data['company_name'] ?? null,
                 'contact_number' => $data['contact_number'] ?? null,
