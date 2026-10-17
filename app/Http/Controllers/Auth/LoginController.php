@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+
+class LoginController extends Controller
+{
+    /*
+    |--------------------------------------------------------------------------
+    | Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
+    |
+    */
+
+    use AuthenticatesUsers;
+
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/user/dashboard';
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+        // $this->middleware('auth')->only('logout');
+    }
+
+    /**
+     * Create a new controller instance.
+     */
+    public function login(Request $request): RedirectResponse
+    {
+        $input = $request->all();
+
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (auth()->attempt(['email' => $input['email'], 'password' => $input['password']])) {
+            if (auth()->user()->type == 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif (auth()->user()->type == 'manager') {
+                return redirect()->route('manager.dashboard');
+            } elseif (auth()->user()->type == 'employee') {
+                return redirect()->route('employee.dashboard');
+            } else {
+                return redirect()->route('user.dashboard');
+            }
+        } else {
+            return redirect()->route('login')
+                ->with('error', 'Email-Address And Password Are Wrong.');
+        }
+
+    }
+}

@@ -1,0 +1,1696 @@
+/* ==========================================================================
+   OMS – Layout Theme
+   --------------------------------------------------------------------------
+   #0a4354   sidebar / headings
+   #0a435426 body background
+   #ffffff   surfaces
+   #FDAB21   buttons / active
+   ========================================================================== */
+
+:root {
+    --oms-primary: #0a4354;
+    --oms-primary-rgb: 10, 67, 84;
+    --oms-primary-dark: #072f3c;
+
+    --oms-accent: #FDAB21;
+    --oms-accent-rgb: 253, 171, 33;
+    --oms-accent-dark: #e0940e;
+
+    --oms-body-bg: #0a435426;
+    --oms-surface: #ffffff;
+
+    --oms-heading: #0a4354;
+    --oms-text: #1f2d33;
+    --oms-muted: #6c8a93;
+
+    --oms-border: rgba(var(--oms-primary-rgb), .12);
+    --oms-shadow-sm: 0 1px 2px rgba(var(--oms-primary-rgb), .06);
+    --oms-shadow-lg: 0 12px 32px rgba(var(--oms-primary-rgb), .18);
+
+    --oms-sidebar-w: 270px;
+    --oms-topbar-h: 62px;
+    --oms-radius: 10px;
+    --oms-radius-sm: 8px;
+    --oms-transition: .25s cubic-bezier(.4, 0, .2, 1);
+
+    /* Bootstrap overrides */
+    --bs-primary: #0a4354;
+    --bs-primary-rgb: 10, 67, 84;
+    --bs-body-color: #1f2d33;
+    --bs-body-bg: #0a435426;
+    --bs-link-color: #0a4354;
+    --bs-link-hover-color: #FDAB21;
+    --bs-border-color: rgba(10, 67, 84, .12);
+    --bs-heading-color: #0a4354;
+    --bs-font-sans-serif: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ==========================================================================
+   1. Base
+   ========================================================================== */
+
+* { -webkit-tap-highlight-color: transparent; }
+
+html { height: 100%; }
+
+body {
+    min-height: 100%;
+    margin: 0;
+    background-color: var(--oms-body-bg);
+    color: var(--oms-text);
+    font-family: var(--bs-font-sans-serif);
+    font-size: .9375rem;
+    line-height: 1.55;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--oms-heading);
+    font-weight: 600;
+}
+
+a { text-decoration: none; transition: color var(--oms-transition); }
+
+*  { scrollbar-width: thin; scrollbar-color: rgba(var(--oms-primary-rgb), .25) transparent; }
+*::-webkit-scrollbar        { width: 6px; height: 6px; }
+*::-webkit-scrollbar-track  { background: transparent; }
+*::-webkit-scrollbar-thumb  { background: rgba(var(--oms-primary-rgb), .25); border-radius: 99px; }
+
+.oms-sidebar *::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .18); }
+
+/* ==========================================================================
+   2. Shell
+   ========================================================================== */
+
+.oms-main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin-left: var(--oms-sidebar-w);
+    transition: margin-left var(--oms-transition);
+}
+
+.oms-content {
+    flex: 1 0 auto;
+    padding: 1.5rem;
+}
+
+/* Backdrop behind the off-canvas sidebar */
+.oms-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1044;
+    background: rgba(var(--oms-primary-rgb), .55);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--oms-transition), visibility var(--oms-transition);
+}
+
+body.sidebar-open .oms-backdrop {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ==========================================================================
+   3. Sidebar
+   ========================================================================== */
+
+.oms-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1045;
+    width: var(--oms-sidebar-w);
+    display: flex;
+    flex-direction: column;
+    background: var(--oms-primary);
+    transition: transform var(--oms-transition);
+}
+
+/* --- Brand --- */
+.oms-sidebar__brand {
+    flex: 0 0 auto;
+    min-height: var(--oms-topbar-h);
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .75rem 1.25rem;
+}
+
+.oms-sidebar__logo {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    padding: 4px;
+    background: #fff;
+    border-radius: var(--oms-radius-sm);
+}
+
+.oms-sidebar__logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.oms-sidebar__name {
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: .01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- Nav --- */
+.oms-sidebar__nav {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: .5rem .85rem 1.5rem;
+}
+
+.oms-nav-heading {
+    padding: 1.25rem .65rem .5rem;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .4);
+    white-space: nowrap;
+}
+
+.oms-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.oms-nav li + li { margin-top: .1rem; }
+
+.oms-nav-link {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    padding: .62rem .8rem;
+    border-radius: var(--oms-radius-sm);
+    color: rgba(255, 255, 255, .72);
+    font-size: .9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background var(--oms-transition), color var(--oms-transition);
+}
+
+/* Fixed icon column keeps every label on the same left edge,
+   whatever the glyph's natural width is. */
+.oms-nav-link > i {
+    flex: 0 0 20px;
+    width: 20px;
+    font-size: 1rem;
+    text-align: center;
+    opacity: .9;
+}
+
+.oms-nav-link span {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.oms-nav-link:hover,
+.oms-nav-link:focus {
+    background: rgba(255, 255, 255, .08);
+    color: #fff;
+}
+
+.oms-nav-link.active {
+    background: var(--oms-accent);
+    color: var(--oms-primary-dark);
+    font-weight: 600;
+}
+
+.oms-nav-link.active > i { opacity: 1; }
+
+.oms-nav-link__caret {
+    flex: 0 0 auto;
+    opacity: .55;
+}
+
+/* ==========================================================================
+   4. Topbar
+   ========================================================================== */
+
+.oms-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    flex: 0 0 auto;
+    min-height: var(--oms-topbar-h);
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    padding: .5rem 1.25rem;
+    background: var(--oms-surface);
+    border-bottom: 1px solid var(--oms-border);
+}
+
+.oms-topbar__title {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--oms-heading);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.oms-icon-btn {
+    position: relative;
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--oms-border);
+    border-radius: var(--oms-radius-sm);
+    background: var(--oms-surface);
+    color: var(--oms-primary);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background var(--oms-transition), color var(--oms-transition), border-color var(--oms-transition);
+}
+
+.oms-icon-btn:hover,
+.oms-icon-btn:focus {
+    background: var(--oms-accent);
+    border-color: var(--oms-accent);
+    color: var(--oms-primary-dark);
+    outline: 0;
+}
+
+.oms-icon-btn--plain {
+    border-color: transparent;
+    background: transparent;
+}
+
+.oms-icon-btn__dot {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    width: 7px;
+    height: 7px;
+    border-radius: 99px;
+    background: #e5484d;
+    border: 2px solid var(--oms-surface);
+}
+
+.oms-avatar {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--oms-radius-sm);
+    background: var(--oms-primary);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: box-shadow var(--oms-transition);
+}
+
+.oms-avatar:hover,
+.oms-avatar:focus {
+    color: #fff;
+    box-shadow: 0 0 0 2px var(--oms-accent);
+}
+
+/* ==========================================================================
+   5. Page-title bar
+   ========================================================================== */
+
+.oms-pagebar {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--oms-surface);
+    border-bottom: 1px solid var(--oms-border);
+}
+
+.oms-pagebar h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.oms-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: .85rem;
+}
+
+.oms-breadcrumb li {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    color: var(--oms-muted);
+}
+
+.oms-breadcrumb li + li::before {
+    content: "›";
+    color: var(--oms-muted);
+    opacity: .7;
+}
+
+.oms-breadcrumb a       { color: var(--oms-muted); }
+.oms-breadcrumb a:hover { color: var(--oms-accent); }
+.oms-breadcrumb .active { color: var(--oms-primary); font-weight: 600; }
+
+/* ==========================================================================
+   6. Dropdown
+   ========================================================================== */
+
+/* Bootstrap defaults the menu background to --bs-body-bg, which is translucent
+   here – pin it to the solid surface colour instead. */
+.dropdown-menu {
+    --bs-dropdown-bg: var(--oms-surface);
+    --bs-dropdown-border-color: var(--oms-border);
+
+    background-color: var(--oms-surface);
+    border: 1px solid var(--oms-border);
+    border-radius: var(--oms-radius);
+    box-shadow: var(--oms-shadow-lg);
+    padding: .35rem;
+    font-size: .875rem;
+}
+
+.dropdown-item {
+    border-radius: var(--oms-radius-sm);
+    padding: .5rem .7rem;
+    color: var(--oms-text);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: rgba(var(--oms-accent-rgb), .14);
+    color: var(--oms-primary);
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    background: var(--oms-accent);
+    color: var(--oms-primary-dark);
+}
+
+.dropdown-header {
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--oms-muted);
+}
+
+/* ==========================================================================
+   7. Common bootstrap tweaks (kept minimal)
+   ========================================================================== */
+
+.card {
+    background: var(--oms-surface);
+    border: 1px solid var(--oms-border);
+    border-radius: var(--oms-radius);
+    box-shadow: var(--oms-shadow-sm);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--oms-border);
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    color: var(--oms-heading);
+}
+
+.btn {
+    --bs-btn-border-radius: var(--oms-radius-sm);
+    font-weight: 600;
+    font-size: .875rem;
+    padding: .5rem 1.05rem;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--oms-accent);
+    --bs-btn-border-color: var(--oms-accent);
+    --bs-btn-color: var(--oms-primary-dark);
+    --bs-btn-hover-bg: var(--oms-accent-dark);
+    --bs-btn-hover-border-color: var(--oms-accent-dark);
+    --bs-btn-hover-color: var(--oms-primary-dark);
+    --bs-btn-active-bg: var(--oms-accent-dark);
+    --bs-btn-active-color: var(--oms-primary-dark);
+}
+
+.btn-brand {
+    --bs-btn-bg: var(--oms-primary);
+    --bs-btn-border-color: var(--oms-primary);
+    --bs-btn-color: #fff;
+    --bs-btn-hover-bg: var(--oms-primary-dark);
+    --bs-btn-hover-border-color: var(--oms-primary-dark);
+    --bs-btn-hover-color: #fff;
+}
+
+.form-control,
+.form-select {
+    border: 1px solid rgba(var(--oms-primary-rgb), .22);
+    border-radius: var(--oms-radius-sm);
+    padding: .55rem .85rem;
+    font-size: .875rem;
+    background-color: var(--oms-surface);
+    color: var(--oms-text);
+}
+
+/* Bootstrap paints the chevron into the background, so the right padding has
+   to stay wide enough to keep it off the value. Its default background is
+   --bs-body-bg, which is translucent here – pin it to the surface colour. */
+.form-select {
+    --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%230a4354' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+
+    padding-right: 2.35rem;
+    background-position: right .8rem center;
+    background-size: 13px 10px;
+    cursor: pointer;
+}
+
+.form-select-sm {
+    padding: .32rem 2rem .32rem .65rem;
+    font-size: .82rem;
+    border-radius: var(--oms-radius-sm);
+    background-position: right .6rem center;
+    background-size: 11px 9px;
+}
+
+.form-select-lg {
+    padding: .7rem 2.6rem .7rem 1rem;
+    font-size: 1rem;
+    border-radius: var(--oms-radius-sm);
+    background-position: right 1rem center;
+}
+
+/* A multi-line select carries no chevron, so it needs no room for one. */
+.form-select[multiple],
+.form-select[size]:not([size="1"]) {
+    padding-right: .85rem;
+    background-image: none;
+    cursor: auto;
+}
+
+.form-select:hover:not(:disabled):not([readonly]) {
+    border-color: rgba(var(--oms-primary-rgb), .38);
+}
+
+.form-select option {
+    background-color: var(--oms-surface);
+    color: var(--oms-text);
+    padding: .3rem .5rem;
+}
+
+.form-control:disabled,
+.form-select:disabled,
+.form-control[readonly] {
+    background-color: rgba(var(--oms-primary-rgb), .04);
+    color: var(--oms-muted);
+    cursor: not-allowed;
+}
+
+.form-control::placeholder { color: var(--oms-muted); opacity: .75; }
+
+.form-control:focus,
+.form-select:focus,
+.btn:focus-visible {
+    border-color: var(--oms-accent);
+    box-shadow: 0 0 0 .2rem rgba(var(--oms-accent-rgb), .3);
+    outline: 0;
+}
+
+/* ==========================================================================
+   8. Guest layout (login / register / password)
+   --------------------------------------------------------------------------
+   A split screen: brand panel on the left, form card on the right, stacking
+   into one column below 992px.
+
+   Two kinds of markup live inside the card. Login and register use the
+   .oms-guest__grid classes below; the password and verify views still ship
+   Bootstrap's .container/.row/.col + .card scaffold, which is flattened at
+   the bottom of this section so they inherit the new look untouched.
+   ========================================================================== */
+
+.oms-guest {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--oms-body-bg);
+    overflow-x: hidden;
+}
+
+/* The soft diagonal sweep across the background. Decorative only. */
+.oms-guest::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(115deg, rgba(255, 255, 255, .6) 0%, rgba(255, 255, 255, 0) 45%),
+        linear-gradient(305deg, rgba(var(--oms-primary-rgb), .08) 0%, rgba(var(--oms-primary-rgb), 0) 50%);
+    pointer-events: none;
+}
+
+.oms-guest__main {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 2.5rem 1.75rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 620px);
+    align-items: center;
+    gap: 2.5rem;
+}
+
+/* --- Brand panel ---------------------------------------------------------- */
+
+.oms-guest__promo { max-width: 580px; }
+
+.oms-guest__promo-head {
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+    margin-bottom: 2rem;
+}
+
+.oms-guest__logo {
+    flex: 0 0 auto;
+    width: 68px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    padding: 9px;
+    background: #fff;
+    border-radius: var(--oms-radius);
+    box-shadow: 0 4px 16px rgba(var(--oms-primary-rgb), .1);
+}
+
+.oms-guest__logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.oms-guest__title {
+    margin: 0;
+    font-size: clamp(1.45rem, 2.3vw, 1.95rem);
+    font-weight: 400;
+    line-height: 1.22;
+    color: var(--oms-heading);
+}
+
+.oms-guest__title strong {
+    display: block;
+    font-size: 1.22em;
+    font-weight: 700;
+}
+
+.oms-guest__lead {
+    margin: 0;
+    max-width: 46ch;
+    font-size: .95rem;
+    font-weight: 600;
+    line-height: 1.75;
+    color: var(--oms-heading);
+}
+
+.oms-guest__lead em {
+    font-style: normal;
+    color: var(--oms-primary);
+}
+
+/* --- Form card ------------------------------------------------------------ */
+
+.oms-guest__box {
+    width: 100%;
+    max-width: 440px;
+    margin-left: auto;
+}
+
+.oms-guest__box--wide { max-width: 620px; }
+
+.oms-guest__card {
+    background: var(--oms-surface);
+    border-radius: 14px;
+    box-shadow: 0 18px 46px rgba(var(--oms-primary-rgb), .15);
+    padding: 1.85rem 1.95rem 2rem;
+}
+
+.oms-guest__heading {
+    margin: 0 0 .2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--oms-heading);
+}
+
+.oms-guest__switch {
+    margin: 0;
+    font-size: .86rem;
+    color: var(--oms-muted);
+}
+
+.oms-guest__switch a {
+    color: #e5484d;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.oms-guest__switch a:hover,
+.oms-guest__switch a:focus { color: #c1343a; text-decoration: underline; }
+
+.oms-guest__rule {
+    margin: 1.05rem 0 1.3rem;
+    border: 0;
+    border-top: 1px solid var(--oms-border);
+    opacity: 1;
+}
+
+.oms-guest__card > .alert {
+    margin-bottom: 1.1rem;
+    padding: .65rem .85rem;
+    border-radius: var(--oms-radius-sm);
+    font-size: .84rem;
+}
+
+.oms-guest__footer {
+    margin: 1.15rem 0 0;
+    text-align: center;
+    font-size: .8rem;
+    color: var(--oms-muted);
+}
+
+.oms-guest__footer strong {
+    color: var(--oms-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* --- Fields --------------------------------------------------------------- */
+
+.oms-guest__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .95rem 1.25rem;
+}
+
+.oms-guest__grid--single { grid-template-columns: minmax(0, 1fr); }
+
+.oms-guest__full { grid-column: 1 / -1; }
+
+.oms-guest__field .form-label {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    margin-bottom: .3rem;
+}
+
+.oms-guest__field .form-label i {
+    color: var(--oms-primary);
+    font-size: .82rem;
+}
+
+.oms-guest__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: .3rem;
+}
+
+.oms-guest__label-row .form-label { margin-bottom: 0; }
+
+.oms-guest__link {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--oms-muted);
+    text-decoration: none;
+}
+
+.oms-guest__link:hover,
+.oms-guest__link:focus { color: var(--oms-primary); text-decoration: underline; }
+
+/* Password inputs carry a reveal button, so they need room on the right —
+   including for Bootstrap's invalid icon, which paints into the background. */
+.oms-guest__pw { position: relative; }
+
+.oms-guest__pw .form-control { padding-right: 2.7rem; }
+
+.oms-guest__pw .form-control.is-invalid {
+    padding-right: 4.4rem;
+    background-position: right 2.7rem center;
+}
+
+/* The wrapper also holds the validation message, so the button is sized to the
+   input rather than stretched to 100%. font-size matches .form-control so the
+   1.5em line box below resolves to the same height the input computes. */
+.oms-guest__pw-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2.7rem;
+    font-size: .875rem;
+    height: calc(1.5em + 1.1rem + 2px);
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--oms-muted);
+    cursor: pointer;
+}
+
+.oms-guest__pw-toggle:hover,
+.oms-guest__pw-toggle:focus-visible { color: var(--oms-primary); }
+
+.oms-guest__options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.oms-guest__options .form-check { margin: 0; }
+
+.oms-guest__options .form-check-label {
+    font-size: .85rem;
+    color: var(--oms-text);
+}
+
+.oms-guest__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    min-width: 165px;
+    padding: .62rem 1.6rem;
+}
+
+/* --- Legacy scaffold (password reset / confirm / verify) ------------------- */
+
+.oms-guest__card .container { padding: 0; max-width: none; }
+.oms-guest__card .row       { margin: 0; }
+.oms-guest__card [class*="col-"] { width: 100%; max-width: none; flex: 0 0 100%; padding: 0; }
+
+.oms-guest__card > .container .card {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.oms-guest__card > .container .card-header {
+    padding: 0 0 .9rem;
+    font-size: 1.35rem;
+}
+
+.oms-guest__card > .container .card-body { padding: 1.2rem 0 0; }
+
+.oms-guest__card .col-form-label {
+    padding-bottom: .3rem;
+    text-align: left !important;
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 1199.98px) {
+    .oms-guest__main {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 540px);
+        gap: 2rem;
+    }
+
+    .oms-guest__box--wide { max-width: 540px; }
+}
+
+@media (max-width: 991.98px) {
+    .oms-guest__main {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+        gap: 2.25rem;
+        padding: 2rem 1.25rem;
+    }
+
+    .oms-guest__promo { max-width: 620px; text-align: center; }
+    .oms-guest__promo-head { justify-content: center; }
+    .oms-guest__lead { margin-inline: auto; }
+
+    .oms-guest__box,
+    .oms-guest__box--wide { max-width: 620px; margin-inline: auto; }
+}
+
+@media (max-width: 575.98px) {
+    .oms-guest__main { padding: 1.5rem 1rem; gap: 1.75rem; }
+    .oms-guest__promo-head { flex-direction: column; gap: .9rem; }
+    .oms-guest__logo { width: 58px; height: 58px; }
+    .oms-guest__title { font-size: 1.3rem; }
+    .oms-guest__card { padding: 1.4rem 1.25rem 1.6rem; border-radius: 12px; }
+    .oms-guest__grid { grid-template-columns: minmax(0, 1fr); }
+    .oms-guest__options { justify-content: center; }
+    .oms-guest__submit { width: 100%; }
+}
+
+/* ==========================================================================
+   9. Sidebar submenu
+   ========================================================================== */
+
+.oms-nav-link__caret { transition: transform var(--oms-transition); }
+
+.oms-nav-link[aria-expanded="true"] {
+    background: rgba(255, 255, 255, .08);
+    color: #fff;
+}
+
+.oms-nav-link[aria-expanded="true"] .oms-nav-link__caret { transform: rotate(90deg); }
+
+.oms-nav-sub {
+    list-style: none;
+    margin: .15rem 0 .25rem;
+    padding: 0 0 0 2.5rem;
+}
+
+.oms-nav-sub a {
+    display: block;
+    padding: .4rem .7rem;
+    border-radius: var(--oms-radius-sm);
+    color: rgba(255, 255, 255, .6);
+    font-size: .84rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background var(--oms-transition), color var(--oms-transition);
+}
+
+.oms-nav-sub a:hover,
+.oms-nav-sub a:focus { background: rgba(255, 255, 255, .07); color: #fff; }
+
+.oms-nav-sub a.active { color: var(--oms-accent); font-weight: 600; }
+
+/* ==========================================================================
+   10. Stat tiles
+   ========================================================================== */
+
+.oms-stat {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--oms-surface);
+    border: 1px solid var(--oms-border);
+    border-radius: var(--oms-radius);
+    box-shadow: var(--oms-shadow-sm);
+}
+
+.oms-stat__icon {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--oms-radius-sm);
+    background: rgba(var(--oms-primary-rgb), .08);
+    color: var(--oms-primary);
+    font-size: 1.1rem;
+}
+
+/* The text column sits next to a fixed-width icon; without this it refuses to
+   shrink and a long value pushes the tile wider than its grid column. */
+.oms-stat > div:last-child { min-width: 0; }
+
+.oms-stat__value,
+.oms-stat__label { overflow-wrap: anywhere; }
+
+/* Tiles that link through to their module. */
+a.oms-stat { color: inherit; }
+
+a.oms-stat:hover,
+a.oms-stat:focus {
+    border-color: rgba(var(--oms-accent-rgb), .55);
+    box-shadow: var(--oms-shadow-lg);
+}
+
+.oms-stat__icon--accent { background: rgba(var(--oms-accent-rgb), .18); color: var(--oms-accent-dark); }
+.oms-stat__icon--good   { background: rgba(25, 135, 84, .13);          color: #146c43; }
+.oms-stat__icon--bad    { background: rgba(229, 72, 77, .13);          color: #b02a2f; }
+
+.oms-stat__label {
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--oms-muted);
+}
+
+.oms-stat__value {
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--oms-heading);
+}
+
+/* ==========================================================================
+   11. Forms
+   ========================================================================== */
+
+.oms-form-title {
+    margin: .25rem 0 1.6rem;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.form-label {
+    margin-bottom: .35rem;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--oms-heading);
+}
+
+.oms-req { color: #e5484d; }
+
+.form-text { font-size: .76rem; color: var(--oms-muted); }
+
+.oms-form-actions {
+    margin-top: 1.75rem;
+    text-align: center;
+}
+
+.oms-form-actions .btn { min-width: 210px; padding: .65rem 1.5rem; }
+
+/* ==========================================================================
+   12. Listing tables
+   ========================================================================== */
+
+.oms-table-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem 1rem;
+    margin-bottom: .95rem;
+}
+
+.oms-table-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem 1rem;
+}
+
+.oms-table-toolbar label {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    margin: 0;
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--oms-muted);
+    white-space: nowrap;
+}
+
+.oms-table-toolbar .form-select,
+.oms-table-toolbar .form-control {
+    width: auto;
+    padding: .32rem .6rem;
+    font-size: .82rem;
+}
+
+/* Compact, but never tight enough to run the value into the chevron. */
+.oms-table-toolbar .form-select {
+    padding-right: 1.95rem;
+    min-width: 5.5rem;
+    background-position: right .6rem center;
+    background-size: 11px 9px;
+    font-weight: 500;
+    color: var(--oms-heading);
+}
+
+.oms-table-toolbar .form-control { min-width: 11rem; max-width: 100%; }
+
+.oms-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--oms-border);
+    border-radius: var(--oms-radius-sm);
+}
+
+table.oms-table {
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: .85rem;
+}
+
+table.oms-table thead th {
+    padding: .78rem .9rem;
+    background: var(--oms-primary);
+    border: 0;
+    color: #fff;
+    font-size: .71rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+table.oms-table tbody td {
+    padding: .68rem .9rem;
+    border-top: 1px solid var(--oms-border);
+    vertical-align: middle;
+
+    /* The table is width:100%, so it never asks the wrapper for a scrollbar —
+       it just crushes its columns instead, which is what broke order numbers
+       across three lines even on a wide screen. Holding every cell to one
+       line makes the table claim the width it actually needs and lets
+       .oms-table-wrap scroll; the cap keeps that width sane. */
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* The row-action buttons are already short; exempting them keeps a focus ring
+   from being clipped by the rule above. */
+table.oms-table tbody td:has(.oms-actions) {
+    max-width: none;
+    overflow: visible;
+}
+
+table.oms-table tbody tr:first-child td { border-top: 0; }
+table.oms-table tbody tr:hover td       { background: rgba(var(--oms-primary-rgb), .035); }
+
+.oms-table-empty {
+    padding: 1.6rem !important;
+    text-align: center;
+    color: var(--oms-muted);
+}
+
+.oms-table-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem 1rem;
+    margin-top: .9rem;
+    font-size: .82rem;
+    color: var(--oms-muted);
+}
+
+.oms-pager { display: flex; flex-wrap: wrap; gap: .3rem; }
+
+.oms-pager button {
+    min-width: 34px;
+    padding: .3rem .65rem;
+    border: 1px solid var(--oms-border);
+    border-radius: var(--oms-radius-sm);
+    background: var(--oms-surface);
+    color: var(--oms-primary);
+    font-size: .8rem;
+    font-weight: 600;
+    transition: background var(--oms-transition), color var(--oms-transition), border-color var(--oms-transition);
+}
+
+.oms-pager button:hover:not(:disabled):not(.active) { background: rgba(var(--oms-primary-rgb), .07); }
+.oms-pager button:disabled                          { opacity: .45; cursor: default; }
+
+.oms-pager button.active {
+    background: var(--oms-accent);
+    border-color: var(--oms-accent);
+    color: var(--oms-primary-dark);
+}
+
+.oms-truncate {
+    display: block;
+    max-width: 380px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   13. Badges, prices & row actions
+   ========================================================================== */
+
+.oms-badge {
+    display: inline-block;
+    padding: .24rem .6rem;
+    border-radius: 99px;
+    font-size: .71rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.oms-badge--progress { background: rgba(var(--oms-accent-rgb), .2);  color: #8a5a00; }
+.oms-badge--pending  { background: rgba(var(--oms-primary-rgb), .1); color: var(--oms-primary); }
+.oms-badge--done,
+.oms-badge--paid     { background: rgba(25, 135, 84, .14);           color: #146c43; }
+.oms-badge--unpaid,
+.oms-badge--urgent   { background: rgba(229, 72, 77, .14);           color: #b02a2f; }
+/* Cancelled is neutral, not an error: the order ended, nothing went wrong. */
+.oms-badge--cancelled { background: rgba(108, 117, 125, .16);        color: #4d5154; }
+
+.oms-price { font-weight: 700; color: var(--oms-primary); }
+.oms-price--zero { color: #b02a2f; }
+
+.oms-actions { display: flex; gap: .35rem; }
+
+.oms-action {
+    width: 32px;
+    height: 32px;
+    display: inline-grid;
+    place-items: center;
+    border: 0;
+    border-radius: var(--oms-radius-sm);
+    background: var(--oms-primary);
+    color: #fff;
+    font-size: .78rem;
+    transition: background var(--oms-transition), color var(--oms-transition);
+}
+
+.oms-action:hover,
+.oms-action:focus { background: var(--oms-accent); color: var(--oms-primary-dark); }
+
+.oms-action--danger { background: #b02a2f; }
+
+.oms-action--danger:hover,
+.oms-action--danger:focus { background: #8f2226; color: #fff; }
+
+/* ==========================================================================
+   14. Switch list (email settings)
+   ========================================================================== */
+
+.oms-switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .85rem 0;
+    border-top: 1px solid var(--oms-border);
+}
+
+.oms-switch:first-child { border-top: 0; padding-top: 0; }
+
+.oms-switch__label { font-weight: 600; color: var(--oms-heading); font-size: .9rem; }
+.oms-switch__hint  { font-size: .78rem; color: var(--oms-muted); }
+
+.form-switch .form-check-input {
+    width: 2.6em;
+    height: 1.3em;
+    margin: 0;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: var(--oms-primary);
+    border-color: var(--oms-primary);
+}
+
+.form-check-input:focus {
+    border-color: var(--oms-accent);
+    box-shadow: 0 0 0 .2rem rgba(var(--oms-accent-rgb), .3);
+}
+
+/* ==========================================================================
+   15. Profile & detail list
+   ========================================================================== */
+
+.oms-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.1rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 1px solid var(--oms-border);
+}
+
+.oms-profile__avatar {
+    flex: 0 0 auto;
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--oms-radius);
+    background: var(--oms-primary);
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.oms-profile__name { font-size: 1.05rem; font-weight: 700; color: var(--oms-heading); }
+.oms-profile__role { font-size: .82rem; color: var(--oms-muted); }
+
+.oms-detail { margin: 0; }
+
+.oms-detail dt {
+    margin-bottom: .1rem;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--oms-muted);
+}
+
+.oms-detail dd {
+    margin: 0 0 .9rem;
+    font-size: .9rem;
+    color: var(--oms-text);
+}
+
+.oms-detail dd:last-child { margin-bottom: 0; }
+
+/* ==========================================================================
+   16. Topbar notifications
+   ========================================================================== */
+
+.oms-notify {
+    width: 340px;
+    max-width: calc(100vw - 1.5rem);
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--oms-surface);
+}
+
+.oms-notify__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .7rem .9rem;
+    background: var(--oms-primary);
+    border-bottom: 1px solid var(--oms-border);
+    font-size: .85rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.oms-notify__count {
+    padding: .1rem .5rem;
+    border-radius: 99px;
+    background: var(--oms-accent);
+    color: var(--oms-primary-dark);
+    font-size: .7rem;
+    font-weight: 700;
+}
+
+.oms-notify__list {
+    max-height: 330px;
+    overflow-y: auto;
+}
+
+.oms-notify__item {
+    display: flex;
+    gap: .7rem;
+    padding: .7rem .9rem;
+    border-bottom: 1px solid var(--oms-border);
+    color: var(--oms-text);
+    transition: background var(--oms-transition);
+}
+
+.oms-notify__item:last-child { border-bottom: 0; }
+
+.oms-notify__item:hover,
+.oms-notify__item:focus { background: rgba(var(--oms-primary-rgb), .05); color: var(--oms-text); }
+
+.oms-notify__item--unread { background: rgba(var(--oms-accent-rgb), .09); }
+
+.oms-notify__icon {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--oms-radius-sm);
+    background: rgba(var(--oms-primary-rgb), .08);
+    color: var(--oms-primary);
+    font-size: .85rem;
+}
+
+.oms-notify__body { min-width: 0; }
+
+.oms-notify__text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: .82rem;
+    line-height: 1.4;
+}
+
+.oms-notify__meta {
+    display: block;
+    margin-top: .15rem;
+    font-size: .72rem;
+    color: var(--oms-muted);
+}
+
+.oms-notify__empty {
+    padding: 1.6rem .9rem;
+    text-align: center;
+    font-size: .85rem;
+    color: var(--oms-muted);
+}
+
+.oms-notify__foot {
+    padding: .6rem .9rem;
+    background: rgba(var(--oms-primary-rgb), .04);
+    border-top: 1px solid var(--oms-border);
+    text-align: center;
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   17. Modals
+   ========================================================================== */
+
+/* Same story as the dropdown: --bs-modal-bg falls back to the translucent
+   --bs-body-bg, so pin it to the surface colour. */
+.modal-content {
+    --bs-modal-bg: var(--oms-surface);
+
+    background-color: var(--oms-surface);
+    border: 1px solid var(--oms-border);
+    border-radius: var(--oms-radius);
+    box-shadow: var(--oms-shadow-lg);
+}
+
+.modal-header,
+.modal-footer { border-color: var(--oms-border); }
+
+.modal-title { font-size: 1rem; font-weight: 600; color: var(--oms-heading); }
+
+/* The larger dialogs wrap .modal-body and .modal-footer in a <form>, because
+   the fields and the submit button have to post together and a form cannot
+   straddle .modal-content's children.
+
+   Bootstrap sizes a scrollable dialog by making .modal-content a flex column
+   whose body shrinks and scrolls while the header and footer stay put — and
+   it assumes those three are its own children. A plain block in between
+   breaks the chain: the form keeps its full natural height, .modal-content
+   clips it (overflow: hidden), and on a short viewport the footer is simply
+   gone, submit button and all. Hand the form the behaviour .modal-content
+   expects of a child and the body scrolls as intended. */
+.modal-content > form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.modal-dialog-scrollable .modal-content > form { overflow: hidden; }
+
+/* ==========================================================================
+   18. Progress bars, timers & performance
+   ========================================================================== */
+
+.oms-progress {
+    height: 6px;
+    border-radius: 99px;
+    background: rgba(var(--oms-primary-rgb), .1);
+    overflow: hidden;
+}
+
+.oms-progress--lg { height: 10px; }
+
+.oms-progress__bar {
+    height: 100%;
+    border-radius: 99px;
+    background: var(--oms-primary);
+    transition: width var(--oms-transition);
+}
+
+.oms-progress__bar--good { background: #198754; }
+.oms-progress__bar--warn { background: var(--oms-accent); }
+.oms-progress__bar--bad  { background: #b02a2f; }
+
+.oms-timer {
+    font-variant-numeric: tabular-nums;
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--oms-primary);
+    white-space: nowrap;
+}
+
+.oms-timer--warn   { color: #8a5a00; }
+.oms-timer--danger { color: #b02a2f; }
+
+.oms-meter__value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--oms-heading);
+}
+
+.oms-meter__label {
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--oms-muted);
+}
+
+/* --- Simple stacked column chart --- */
+.oms-bars {
+    display: flex;
+    align-items: stretch;
+    gap: .5rem;
+    height: 160px;
+}
+
+.oms-bars__col {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+}
+
+.oms-bars__track {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column-reverse;
+    border-radius: 6px 6px 0 0;
+    background: rgba(var(--oms-primary-rgb), .06);
+    overflow: hidden;
+}
+
+.oms-bars__seg { width: 100%; }
+.oms-bars__seg--good { background: #198754; }
+.oms-bars__seg--bad  { background: #b02a2f; }
+
+.oms-bars__label {
+    font-size: .7rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--oms-muted);
+}
+
+.oms-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
+    font-size: .75rem;
+    color: var(--oms-muted);
+}
+
+.oms-legend span { display: inline-flex; align-items: center; gap: .4rem; }
+
+.oms-legend i {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 3px;
+}
+
+/* ==========================================================================
+   19. Upload area & timeline
+   ========================================================================== */
+
+.oms-dropzone {
+    display: block;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    border: 2px dashed rgba(var(--oms-primary-rgb), .25);
+    border-radius: var(--oms-radius);
+    background: rgba(var(--oms-primary-rgb), .03);
+    cursor: pointer;
+    transition: background var(--oms-transition), border-color var(--oms-transition);
+}
+
+.oms-dropzone:hover {
+    background: rgba(var(--oms-accent-rgb), .07);
+    border-color: var(--oms-accent);
+}
+
+.oms-dropzone i { font-size: 1.4rem; color: var(--oms-primary); }
+
+.oms-dropzone__title { display: block; margin-top: .5rem; font-weight: 600; font-size: .88rem; color: var(--oms-heading); }
+.oms-dropzone__hint  { display: block; font-size: .76rem; color: var(--oms-muted); }
+
+.oms-filelist {
+    list-style: none;
+    margin: .75rem 0 0;
+    padding: 0;
+    font-size: .82rem;
+}
+
+.oms-filelist li {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .4rem .6rem;
+    border: 1px solid var(--oms-border);
+    border-radius: var(--oms-radius-sm);
+}
+
+.oms-filelist li + li { margin-top: .35rem; }
+
+.oms-review {
+    padding: .9rem 1rem;
+    background: rgba(var(--oms-primary-rgb), .04);
+    border: 1px solid var(--oms-border);
+    border-radius: var(--oms-radius-sm);
+}
+
+.oms-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.5rem;
+    border-left: 2px solid var(--oms-border);
+}
+
+.oms-timeline li { position: relative; padding: 0 0 1.1rem .2rem; }
+.oms-timeline li:last-child { padding-bottom: 0; }
+
+.oms-timeline li::before {
+    content: "";
+    position: absolute;
+    left: -1.85rem;
+    top: .35rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 99px;
+    background: var(--oms-primary);
+    box-shadow: 0 0 0 3px rgba(var(--oms-primary-rgb), .14);
+}
+
+.oms-timeline li.is-good::before { background: #198754; box-shadow: 0 0 0 3px rgba(25, 135, 84, .16); }
+.oms-timeline li.is-bad::before  { background: #b02a2f; box-shadow: 0 0 0 3px rgba(229, 72, 77, .16); }
+
+.oms-timeline__title { font-size: .86rem; font-weight: 600; color: var(--oms-heading); }
+.oms-timeline__meta  { font-size: .75rem; color: var(--oms-muted); }
+
+/* ==========================================================================
+   20. Responsive
+   ========================================================================== */
+
+/* Tablet & below – sidebar becomes off-canvas */
+@media (max-width: 991.98px) {
+
+    .oms-sidebar {
+        transform: translateX(-100%);
+        box-shadow: var(--oms-shadow-lg);
+    }
+
+    body.sidebar-open .oms-sidebar { transform: translateX(0); }
+    body.sidebar-open              { overflow: hidden; }
+
+    .oms-main { margin-left: 0; }
+}
+
+/* Desktop – toggle hides the sidebar completely */
+@media (min-width: 992px) {
+
+    body.sidebar-hidden .oms-sidebar { transform: translateX(-100%); }
+    body.sidebar-hidden .oms-main    { margin-left: 0; }
+
+    .oms-backdrop { display: none; }
+}
+
+@media (max-width: 767.98px) {
+    :root { --oms-topbar-h: 58px; }
+
+    .oms-topbar,
+    .oms-pagebar { padding-left: 1rem; padding-right: 1rem; }
+
+    .oms-content { padding: 1rem; }
+
+    .oms-pagebar h1 { font-size: 1.05rem; }
+
+    .oms-truncate { max-width: 220px; }
+
+    .oms-table-toolbar,
+    .oms-table-foot { justify-content: flex-start; }
+
+    /* Tighter cap than the desktop one: the sideways scroll is cheaper on a
+       phone than a row that is three lines tall. */
+    table.oms-table tbody td { max-width: 190px; }
+
+    /* Seven full-width tiles is a lot of thumb before the first table, so the
+       tile gets shorter rather than narrower — the labels need the width. */
+    .oms-stat        { padding: .85rem .95rem; gap: .75rem; }
+    .oms-stat__icon  { width: 38px; height: 38px; font-size: .95rem; }
+    .oms-stat__value { font-size: 1.2rem; }
+}
+
+@media (max-width: 575.98px) {
+    :root { --oms-sidebar-w: 264px; }
+
+    body { font-size: .9rem; }
+
+    .oms-topbar,
+    .oms-pagebar { padding-left: .85rem; padding-right: .85rem; }
+
+    .oms-content { padding: .85rem; }
+
+    .oms-icon-btn,
+    .oms-avatar { width: 34px; height: 34px; }
+
+    .oms-topbar { gap: .5rem; }
+}
+
+@media (max-width: 359.98px) {
+    :root { --oms-sidebar-w: 240px; }
+}
+
+@media print {
+    .oms-sidebar,
+    .oms-topbar,
+    .oms-backdrop { display: none !important; }
+
+    .oms-main    { margin-left: 0 !important; }
+    .oms-content { padding: 0; }
+    body         { background: #fff; }
+}
